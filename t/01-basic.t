@@ -19,6 +19,7 @@ use Test;
 use Slang::Kazu;
 
 is 一, 1, 'Literal 1';
+is 九, 9, 'Literal 9';
 
 is 十, 10, 'Literal 10';
 is 十二, 12, 'Literal 12';
