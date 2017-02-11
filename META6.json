@@ -1,0 +1,22 @@
+{
+  "name" : "Slang::Kazu",
+  "source-url" : "git://github.com/Altai-man/perl6-Slang-Kazu.git",
+  "support" : {
+    "source" : null
+  },
+  "perl" : "6.c",
+  "provides" : {
+    "Slang::Kazu" : "lib/Slang/Kazu.pm6"
+  },
+  "license" : "https://www.gnu.org/licenses/gpl-3.0.txt",
+  "test-depends" : [
+    "Test::META"
+  ],
+  "description" : "Japanese numerals in your Perl 6",
+  "version" : "1.0",
+  "meta6" : "0",
+  "authors" : [
+    "github:Altai-man",
+    ""
+  ]
+}
