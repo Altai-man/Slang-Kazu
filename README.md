@@ -10,6 +10,8 @@ SYNOPSIS
 
     use Slang::Kazu;
     say "3542" ~~ 三千五百四十二; # True
+    say '一' ~~ /<single-kazu>/; # Will match any digit from 1 to 9
+
 
 DESCRIPTION
 ===========

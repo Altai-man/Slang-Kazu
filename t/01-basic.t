@@ -46,4 +46,10 @@ is 二万, 20000, 'Literal 20000';
 is 一万百, 10100, 'Literal 10100';
 is 九万七百九, 90709, 'Literal 90709';
 
+# Single regex is exported.
+is ~('一' ~~ /<single-kazu>/), "一";
+
+# Grammar is exported
+isnt Kazu.parse('一千九百二十三'), Any;
+
 done-testing;

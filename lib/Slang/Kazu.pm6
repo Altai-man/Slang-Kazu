@@ -30,53 +30,54 @@ my %matcher = 一 => 1,
               九 => 9,
               十 => 10;
 
+our token single-kazu { <[一二三四五六七八九]> };
+
 grammar Kazu {
-    token TOP     { <single> | <ten> | <hundred> | <thousnd> | <tenthou> }
-    token single  { <[一二三四五六七八九]> }
-    token ten     { (<single>)? '十' (<single>)? }
-    token hundred { (<single>)? '百' (<single> | <ten>)? }
-    token thousnd { (<single>)? '千' (<hundred> | <ten> | <single>)? }
-    token tenthou { (<single>)? '万' (<thousnd> | <hundred> | <ten> | <single>)? }
+    token TOP     { <single-kazu> | <ten> | <hundred> | <thousnd> | <tenthou> }
+    token ten     { (<single-kazu>)? '十' (<single-kazu>)? }
+    token hundred { (<single-kazu>)? '百' (<single-kazu> | <ten>)? }
+    token thousnd { (<single-kazu>)? '千' (<hundred> | <ten> | <single-kazu>)? }
+    token tenthou { (<single-kazu>)? '万' (<thousnd> | <hundred> | <ten> | <single-kazu>)? }
     # TODO
     # token counter { <[本枚個杯冊台階件足通分秒匹頭羽回度番等人名歳才年]> }
 }
 
 class Translator {
     method TOP ($/)     { make (given ($/) {
-                                when $<single>  { $<single>.made }
-                                when $<ten>     { $<ten>.made }
-                                when $<hundred> { $<hundred>.made }
-                                when $<thousnd> { $<thousnd>.made }
-                                when $<tenthou> { $<tenthou>.made }
+                                when $<single-kazu> { $<single-kazu>.made }
+                                when $<ten>         { $<ten>.made }
+                                when $<hundred>     { $<hundred>.made }
+                                when $<thousnd>     { $<thousnd>.made }
+                                when $<tenthou>      { $<tenthou>.made }
                             })
                         }
-    method single ($/)  { make %matcher{$/}; }
-    method ten ($/)     { make ($0 ?? $0<single>.made * 10 !! 10) +
-                               ($1 ?? $1<single>.made      !! 0); }
-    method hundred ($/) { my $res = ($0 ?? $0<single>.made * 100 !! 100);
+    method single-kazu ($/)  { make %matcher{$/}; }
+    method ten ($/)     { make ($0 ?? $0<single-kazu>.made * 10 !! 10) +
+                               ($1 ?? $1<single-kazu>.made      !! 0); }
+    method hundred ($/) { my $res = ($0 ?? $0<single-kazu>.made * 100 !! 100);
                           ($res += (given $1 {
-                                  when $1<single> { $1<single>.made };
-                                  when $1<ten>    { $1<ten>.made };
-                                  default         { 0 }
+                                  when $1<single-kazu> { $1<single-kazu>.made };
+                                  when $1<ten>         { $1<ten>.made };
+                                  default              { 0 }
                                        })) if $1;
                           make $res;
                         }
-    method thousnd ($/) { my $res = ($0 ?? $0<single>.made * 1000 !! 1000);
+    method thousnd ($/) { my $res = ($0 ?? $0<single-kazu>.made * 1000 !! 1000);
                           ($res += (given $1 {
-                                  when $1<hundred> { $1<hundred>.made };
-                                  when $1<single>  { $1<single>.made };
-                                  when $1<ten>     { $1<ten>.made };
-                                  default          { 0 }
+                                  when $1<hundred>     { $1<hundred>.made };
+                                  when $1<single-kazu> { $1<single-kazu>.made };
+                                  when $1<ten>         { $1<ten>.made };
+                                  default              { 0 }
                               })) if $1;
                           make $res;
                         }
-    method tenthou ($/) { my $res = ($0 ?? $0<single>.made * 10000 !! 10000);
+    method tenthou ($/) { my $res = ($0 ?? $0<single-kazu>.made * 10000 !! 10000);
                           ($res += (given $1 {
-                                           when $1<thousnd> { $1<thousnd>.made };
-                                           when $1<hundred> { $1<hundred>.made };
-                                           when $1<single>  { $1<single>.made };
-                                           when $1<ten>     { $1<ten>.made };
-                                           default          { 0 }
+                                           when $1<thousnd>     { $1<thousnd>.made };
+                                           when $1<hundred>     { $1<hundred>.made };
+                                           when $1<single-kazu> { $1<single-kazu>.made };
+                                           when $1<ten>         { $1<ten>.made };
+                                           default              { 0 }
                               })) if $1;
                           make $res;
                         }
