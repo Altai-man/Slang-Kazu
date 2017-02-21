@@ -19,17 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 use nqp;
 use QAST:from<NQP>;
 
-my %matcher = 一 => 1,
-              二 => 2,
-              三 => 3,
-              四 => 4,
-              五 => 5,
-              六 => 6,
-              七 => 7,
-              八 => 8,
-              九 => 9,
-              十 => 10;
-
 our token single-kazu { <[一二三四五六七八九]> };
 
 grammar Kazu {
@@ -51,7 +40,7 @@ class Translator {
                                 when $<tenthou>      { $<tenthou>.made }
                             })
                         }
-    method single-kazu ($/)  { make %matcher{$/}; }
+    method single-kazu ($/)  { make unival ~$/; }
     method ten ($/)     { make ($0 ?? $0<single-kazu>.made * 10 !! 10) +
                                ($1 ?? $1<single-kazu>.made      !! 0); }
     method hundred ($/) { my $res = ($0 ?? $0<single-kazu>.made * 100 !! 100);
