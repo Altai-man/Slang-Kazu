@@ -1,5 +1,6 @@
 {
   "name" : "Slang::Kazu",
+  "tags" ["ACME", "Slang"],
   "source-url" : "git://github.com/Altai-man/perl6-Slang-Kazu.git",
   "support" : {
     "source" : null
