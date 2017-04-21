@@ -9,7 +9,7 @@
   "provides" : {
     "Slang::Kazu" : "lib/Slang/Kazu.pm6"
   },
-  "license" : "https://www.gnu.org/licenses/gpl-3.0.txt",
+  "license" : "GPL-3.0",
   "test-depends" : [
     "Test::META"
   ],
