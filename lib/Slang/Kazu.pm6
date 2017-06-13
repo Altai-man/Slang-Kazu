@@ -1,6 +1,6 @@
 use v6;
 #`(
-Copyright ©  
+Copyright © Altai-man
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -87,25 +87,19 @@ sub EXPORT(|) {
         sub lk(Mu \h, \k) {
             nqp::atkey(nqp::findmethod(h, 'hash')(h), k)
         }
-    
+
         method number:sym<kazu>(Mu $/) {
             my $number   := lk($/, 'japint');
             my $block := QAST::Op.new(:op<call>,
                                       :name<&Slang::Kazu::to-number>,
                                       QAST::SVal.new(:value($number.Str))
                                      );
-            $/.'!make'($block);
+            $/.'make'($block);
         }
     }
 
-    nqp::bindkey(%*LANG,
-                 'MAIN',
-                 %*LANG<MAIN>.HOW.mixin(%*LANG<MAIN>,
-                 Kazu::Grammar));
-    nqp::bindkey(%*LANG,
-                 'MAIN-actions',
-                 %*LANG<MAIN-actions>.HOW.mixin(%*LANG<MAIN-actions>,
-                 Kazu::Actions));
+
+    $*LANG.define_slang('MAIN', Kazu::Grammar, Kazu::Actions);
     {}
 }
 
