@@ -1,7 +1,7 @@
 {
   "name" : "Slang::Kazu",
   "tags": ["ACME", "Slang"],
-  "source-url" : "git://github.com/Altai-man/perl6-Slang-Kazu.git",
+  "source-url" : "git://github.com/Altai-man/Slang-Kazu.git",
   "support" : {
     "source" : null
   },
@@ -9,7 +9,7 @@
   "provides" : {
     "Slang::Kazu" : "lib/Slang/Kazu.pm6"
   },
-  "license" : "https://www.gnu.org/licenses/gpl-3.0.txt",
+  "license" : "GPL-3.0",
   "test-depends" : [
     "Test::META"
   ],
