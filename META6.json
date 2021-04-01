@@ -6,6 +6,7 @@
     "source" : null
   },
   "perl" : "6.c",
+  "auth": "zef:Altai-man",
   "provides" : {
     "Slang::Kazu" : "lib/Slang/Kazu.pm6"
   },
@@ -15,9 +16,5 @@
   ],
   "description" : "Japanese numerals in your Perl 6",
   "version" : "1.1",
-  "meta6" : "0",
-  "authors" : [
-    "github:Altai-man",
-    ""
-  ]
+  "meta6" : "0"
 }
