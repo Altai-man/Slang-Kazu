@@ -1,4 +1,3 @@
-use v6;
 #`(
 Copyright © Altai-man
 
@@ -16,9 +15,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 )
 
-use nqp;
-use QAST:from<NQP>;
-
 our token single-kazu { <[一二三四五六七八九]> };
 
 grammar Kazu {
@@ -32,14 +28,15 @@ grammar Kazu {
 }
 
 class Translator {
-    method TOP ($/)     { make (given ($/) {
-                                when $<single-kazu> { $<single-kazu>.made }
-                                when $<ten>         { $<ten>.made }
-                                when $<hundred>     { $<hundred>.made }
-                                when $<thousnd>     { $<thousnd>.made }
-                                when $<tenthou>      { $<tenthou>.made }
-                            })
-                        }
+    method TOP ($/) {
+        make do given $/ {
+            when $<single-kazu> { $<single-kazu>.made }
+            when $<ten>         { $<ten>.made }
+            when $<hundred>     { $<hundred>.made }
+            when $<thousnd>     { $<thousnd>.made }
+            when $<tenthou>     { $<tenthou>.made }
+        }
+    }
     method single-kazu ($/)  { make unival ~$/; }
     method ten ($/)     { make ($0 ?? $0<single-kazu>.made * 10 !! 10) +
                                ($1 ?? $1<single-kazu>.made      !! 0); }
@@ -73,44 +70,40 @@ class Translator {
     # The code looks uglier with every level of depth here.
 }
 
-sub Slang::Kazu::to-number(Str $value --> Int) is export {
+my sub to-number(Str $value --> Int) {
     Kazu.parse($value, actions => Translator).made;
 };
 
-sub EXPORT(|) {
-    role Kazu::Grammar {
-        rule number:sym<kazu> { <japint> }
-        token japint { <[一二三四五六七八九十百千万]>+ }
-    }
-
-    role Kazu::Actions {
-        sub lk(Mu \h, \k) {
-            nqp::atkey(nqp::findmethod(h, 'hash')(h), k)
-        }
-
-        method number:sym<kazu>(Mu $/) {
-            my $number   := lk($/, 'japint');
-            my $block := QAST::Op.new(:op<call>,
-                                      :name<&Slang::Kazu::to-number>,
-                                      QAST::SVal.new(:value($number.Str))
-                                     );
-            $/.'make'($block);
-        }
-    }
-
-    $*LANG.define_slang(
-      'MAIN',
-      $*LANG.slang_grammar('MAIN').^mixin(Kazu::Grammar),
-      $*LANG.slang_actions('MAIN').^mixin(Kazu::Actions),
-    );
-    {}
+my role Grammar {
+    token number:sym<kazu> { <[一二三四五六七八九十百千万]>+ }
 }
+
+my role Actions {
+    method number:sym<kazu>(Mu $/) {
+        CATCH { OUTER::<$/>.panic: .message }
+        my $value := to-number($/.Str);
+
+        # Running under the Raku grammar
+        if self.^name.starts-with('Raku::') {
+            use experimental :rakuast;
+            make RakuAST::IntLiteral.new($value);
+        }
+
+        # Running under the legacy grammar
+        else {
+            use QAST:from<NQP>;
+            make QAST::IVal.new(:$value);
+        }
+    }
+}
+
+use Slangify Grammar, Actions;
 
 =begin pod
 
 =head1 NAME
 
-Slang::Kazu - Japanese numerals in your Perl 6
+Slang::Kazu - Japanese numerals in Raku
 
 =head1 SYNOPSIS
 
@@ -119,11 +112,11 @@ Slang::Kazu - Japanese numerals in your Perl 6
 
 =head1 DESCRIPTION
 
-Slang::Kazu is a Perl 6 slang that allows you to use a subset of native Japanese numerals in your Perl 6 code because you can.
+Slang::Kazu is a Raku slang that allows you to use a subset of native Japanese numerals in your Raku code because you can.
 
-You can use numbers from 1 to 99999. Counters are yet to be implemented. Mostly this is a clone of [drforr's](http://github.com/drforr) `Slang::Roman`, but for Japanese numerals - all thanks to him for the idea and the implementation.
+You can use numbers from 1 to 99999. Counters are yet to be implemented. Mostly this is a clone of [drforr's](https://github.com/raku-community-modules/Slang-Roman) C<Slang::Roman>, but for Japanese numerals - all thanks to him for the idea and the implementation.
 
-Currently, incorrect numbers like `二二` are evaluated to `Nil` and you will see some scary errors because of that, so don't lose your kanji!
+Currently, incorrect numbers like C<二二> are evaluated to C<Nil> and you will see some scary errors because of that, so don't lose your kanji!
 
 This project is just a joke and doesn't intented to be used in any serious codebases! You are warned.
 
