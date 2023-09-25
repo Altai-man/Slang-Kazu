@@ -3,7 +3,7 @@
 NAME
 ====
 
-Slang::Kazu - Japanese numerals in your Perl 6
+Slang::Kazu - Japanese numerals in your Raku
 
 SYNOPSIS
 ========
@@ -16,9 +16,9 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-Slang::Kazu is a Perl 6 slang that allows you to use a subset of native Japanese numerals in your Perl 6 code because you can.
+Slang::Kazu is a Raku slang that allows you to use a subset of native Japanese numerals in your Raku code because you can.
 
-You can use numbers from 1 to 99999. Counters are yet to be implemented. Mostly this is a clone of [drforr's](http://github.com/drforr) `Slang::Roman`, but for Japanese numerals - all thanks to him for the idea and the implementation.
+You can use numbers from 1 to 99999. Counters are yet to be implemented. Mostly this is a clone of [drforr's](https://github.com/raku-community-modules/Slang-Roman) `Slang::Roman`, but for Japanese numerals - all thanks to him for the idea and the implementation.
 
 Currently, incorrect numbers like `二二` are evaluated to `Nil` and you will see some scary errors because of that, so don't lose your kanji!
 

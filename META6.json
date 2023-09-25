@@ -7,8 +7,11 @@
   },
   "perl" : "6.c",
   "auth": "zef:Altai-man",
+  "depends": [
+    "Slangify:ver<0.0.1+>:auth<zef:lizmat>"
+  ],
   "provides" : {
-    "Slang::Kazu" : "lib/Slang/Kazu.pm6"
+    "Slang::Kazu" : "lib/Slang/Kazu.rakumod"
   },
   "license" : "GPL-3.0",
   "test-depends" : [
